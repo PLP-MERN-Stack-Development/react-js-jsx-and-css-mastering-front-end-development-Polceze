@@ -1,72 +1,67 @@
-import { useState } from 'react';
-import './App.css';
+import React, { useState, createContext, useContext } from 'react';
+import Layout from './components/Layout';
+import TaskManager from './components/TaskManager';
+import ApiDataDisplay from './components/ApiDataDisplay';
+import Card from './components/Card';
 
-// Import your components here
-// import Button from './components/Button';
-// import Navbar from './components/Navbar';
-// import Footer from './components/Footer';
-// import TaskManager from './components/TaskManager';
+// Create Theme Context
+export const ThemeContext = createContext();
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [activeTab, setActiveTab] = useState('tasks');
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  // Apply dark mode class to document
+  React.useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      {/* Navbar component will go here */}
-      <header className="bg-white dark:bg-gray-800 shadow">
+    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
+      <Layout onThemeToggle={toggleTheme} isDarkMode={isDarkMode}>
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold">PLP Task Manager</h1>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg p-6">
-          <div className="flex flex-col items-center justify-center">
-            <p className="text-lg mb-4">
-              Edit <code className="font-mono bg-gray-200 dark:bg-gray-700 p-1 rounded">src/App.jsx</code> and save to test HMR
-            </p>
-            
-            <div className="flex items-center gap-4 my-4">
+          
+          {/* Navigation Tabs */}
+          <Card className="mb-6">
+            <div className="flex border-b border-gray-200 dark:border-gray-700">
               <button
-                onClick={() => setCount((count) => count - 1)}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                onClick={() => setActiveTab('tasks')}
+                className={`py-2 px-4 font-medium ${
+                  activeTab === 'tasks'
+                    ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400'
+                    : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
               >
-                -
+                Task Manager
               </button>
-              <span className="text-xl font-bold">{count}</span>
               <button
-                onClick={() => setCount((count) => count + 1)}
-                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                onClick={() => setActiveTab('api')}
+                className={`py-2 px-4 font-medium ${
+                  activeTab === 'api'
+                    ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400'
+                    : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
               >
-                +
+                API Data
               </button>
             </div>
+          </Card>
 
-            <p className="text-gray-500 dark:text-gray-400 mt-4">
-              Implement your TaskManager component here
-            </p>
-          </div>
+          {/* Content based on active tab */}
+          {activeTab === 'tasks' && <TaskManager />}
+          {activeTab === 'api' && <ApiDataDisplay />}
         </div>
-        
-        {/* API data display will go here */}
-        <div className="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">API Data</h2>
-          <p className="text-gray-500 dark:text-gray-400">
-            Fetch and display data from an API here
-          </p>
-        </div>
-      </main>
-
-      {/* Footer component will go here */}
-      <footer className="bg-white dark:bg-gray-800 shadow mt-auto">
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-gray-500 dark:text-gray-400">
-            © {new Date().getFullYear()} PLP Task Manager. All rights reserved.
-          </p>
-        </div>
-      </footer>
-    </div>
+      </Layout>
+    </ThemeContext.Provider>
   );
 }
 
-export default App; 
+export default App;
