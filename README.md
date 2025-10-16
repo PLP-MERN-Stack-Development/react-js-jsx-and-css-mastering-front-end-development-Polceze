@@ -22,8 +22,8 @@ A modern, responsive React application for managing tasks with API integration, 
 ## 🚀 Live Demo
 
 **Live Application:** [https://wk3-assgnmnt.netlify.app/](https://wk3-assgnmnt.netlify.app/)
-- ![App Screenshot](/screenshots/light-mode.jpg)
-- ![App Screenshot](/screenshots/dark-mode.jpg)
+- ![App Screenshot](./screenshots/light-mode.jpg)
+- ![App Screenshot](./screenshots/dark-mode.jpg)
 
 ## 🛠️ Tech Stack
 
